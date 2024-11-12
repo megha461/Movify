@@ -1,0 +1,134 @@
+<head>
+    <meta charset="utf-8">
+    <title>Robert's Movie Reviews</title>
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script src="https://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    <style type="text/css" media="screen">
+        body {
+            padding-top: 80px;
+            background-color:rgb(245,250,240);
+        }
+        #trailer .modal-dialog, #review .modal-dialog {
+            margin-top: 200px;
+            width: 640px;
+            height: auto;
+        }
+        .hanging-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            z-index: 9001;
+        }
+        #trailer-video {
+            width: 100%;
+            height: 100%;
+        }
+        .movie-tile {
+            margin-bottom: 20px;
+            padding-top: 20px;
+        }
+        .movie-title h2{
+            font-size: 1.8em;
+            font-weight: 700;
+            color: rgb(212, 212, 212);
+        }
+        .overlay {
+            background-color: black;
+            width: 220px;
+            height: 342px;
+            position: absolute;
+            opacity: 0;
+        }
+        .overlay span{
+            font-size:100px;
+            color:white;
+            display: block;
+            padding-top: 93px;
+        }
+        .overlay:hover {
+            opacity: 0.5;
+        }
+        .movie-tile-2{
+            width:220px;
+            margin-left:auto;
+            margin-right:auto;
+        }
+        .movie-tile-2:hover {
+            cursor: pointer;
+        }
+        .movie-tile h4{
+            width:220px;
+            background-color:orange;
+            margin-left:auto;
+            margin-right:auto;
+            padding: 10px;
+        }
+        .movie-tile h4{
+            color:white;
+        }
+        .scale-media {
+            padding-bottom: 56.25%;
+            position: relative;
+        }
+        .scale-media iframe {
+            border: none;
+            height: 100%;
+            position: absolute;
+            width: 100%;
+            left: 0;
+            top: 0;
+            background-color: white;
+        }
+        .movie-img{
+            box-shadow: 3px 3px 5px #C7C7C7;
+        }
+        .review-modal{
+            padding:25px;
+        }
+        .review-title{
+            font-size:1.75em;
+            margin-bottom: 40px;
+        }
+        .review-modal p {
+            font-size:1.25em;
+        }
+    </style>
+    <script type="text/javascript" charset="utf-8">
+        // Pause the video when the modal is closed
+        $(document).on('click', '.hanging-close, .modal-backdrop, .modal', function (event) {
+            // Remove the src so the player itself gets removed, as this is the only
+            // reliable way to ensure the video stops playing in IE
+            $("#trailer-video-container").empty();
+        });
+        // Start playing the video whenever the trailer modal is opened
+        $(document).on('click', '.movie-tile-2', function (event) {
+            var trailerYouTubeId = $(this).attr('data-trailer-youtube-id')
+            var sourceUrl = 'http://www.youtube.com/embed/' + trailerYouTubeId + '?autoplay=1&html5=1';
+            $("#trailer-video-container").empty().append($("<iframe></iframe>", {
+              'id': 'trailer-video',
+              'type': 'text-html',
+              'src': sourceUrl,
+              'frameborder': 0
+            }));
+        });
+
+        // display review when modal is opened
+        $(document).on('click', '.review-button', function (event) {
+            var text = $(this).siblings(".review-text").text();
+            var title = $(this).siblings(".movie-title").children("h2").text();
+            var rating = $(this).attr('rating')
+            $("#review-container").empty().append($("<div class='review-modal'><h1 class='review-title'>" + title + " " + rating + "</h1><p>" +  text + "</p></div>"));
+        });
+
+        // Animate in the movies when the page loads
+        $(document).ready(function () {
+          $('.movie-tile').hide().first().show("fast", function showNext() {
+            $(this).next("div").show("fast", showNext);
+          });
+        });
+    </script>
+</head>
